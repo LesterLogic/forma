@@ -2,7 +2,11 @@
 
 use Phalcon\Mvc\Router,
     Phalcon\Mvc\Application,
-    Phalcon\DI\FactoryDefault;
+    Phalcon\DI\FactoryDefault,
+    Phalcon\Session\Adapter\Files;
+
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
 $di = new FactoryDefault();
 
@@ -18,7 +22,6 @@ $di->set('db', function() {
 
 //Specify routes for modules
 $di->set('router', function () {
-
     $router = new Router();
 
     $router->setDefaultModule("App");
@@ -26,7 +29,7 @@ $di->set('router', function () {
     $router->add("/login", array(
         'module'     => 'App',
         'controller' => 'Login',
-        'action'     => 'login',
+        'action'     => 'index',
     ));
 
     $router->add("/", array(
@@ -41,6 +44,13 @@ $di->set('router', function () {
     ));
 */
     return $router;
+});
+
+//Start the session the first time when some component request the session service
+$di->setShared('session', function() {
+    $session = new Phalcon\Session\Adapter\Files();
+    $session->start();
+    return $session;
 });
 
 try {
@@ -74,10 +84,6 @@ try {
             'Project'  => array(
                 'className' => 'forma\Project\Module',
                 'path'      => '../apps/Project/Module.php',
-            ),
-            'Security'  => array(
-                'className' => 'forma\Security\Module',
-                'path'      => '../apps/Security/Module.php',
             ),
             'Tasklist'  => array(
                 'className' => 'forma\Tasklist\Module',
