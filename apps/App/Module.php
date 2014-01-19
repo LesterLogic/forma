@@ -2,8 +2,6 @@
 
 namespace forma\App;
 
-require_once "../apps/App/services/Security.php";
-
 use Phalcon\Loader,
     Phalcon\Mvc\Dispatcher,
     Phalcon\Mvc\View,
@@ -25,6 +23,7 @@ class Module implements ModuleDefinitionInterface
                 'forma\App\Controllers' => '../apps/App/controllers/',
                 'forma\App\Models'      => '../apps/App/models/',
                 'forma\App\Services'    => '../apps/App/services/',
+                'forma\App\Forms'       => '../apps/App/forms/',
             )
         );
 
@@ -51,9 +50,9 @@ class Module implements ModuleDefinitionInterface
             return $view;
         });
 
-        $di->set('security', function() use ($di) {
-            $security = new services\Security($di);
-            return $security;
+        $di->set('acl', function() use ($di) {
+            $acl = new Services\Acl($di);
+            return $acl;
         });
     }
 

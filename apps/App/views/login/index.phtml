@@ -1,20 +1,22 @@
-<html>
-<head></head>
-<body>
-    <form>
-        <table>
-            <tr>
-                <td>Username:</td>
-                <td><input type="text" name="login-name" value="" size="25" /></td>
-            </tr>
-            <tr>
-                <td>Password:</td>
-                <td><input type="password" name="login-password" value="" size="25" /></td>
-            </tr>
-            <tr>
-                <td colspan="2"><input type="submit" name="login-submit" value="Login" /></td>
-            </tr>
-        </table>
-    </form>
-</body>
-</html>
+<form method="post">
+<?php
+foreach ($form as $element) {
+    //Get any generated messages for the current element
+    $messages = $form->getMessagesFor($element->getName());
+
+    if (count($messages)) {
+        //Print each element
+        echo '<div class="messages">';
+        foreach ($messages as $message) {
+            echo $message;
+        }
+        echo '</div>';
+    }
+
+    echo '<p>';
+    echo '<label for="', $element->getName(), '">', $element->getLabel(), '</label>';
+    echo $element;
+    echo '</p>';
+}
+?>
+</form>

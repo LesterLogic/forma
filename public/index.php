@@ -35,7 +35,7 @@ $di->set('router', function () {
     $router->add("/", array(
         'module'     => 'App',
         'controller' => 'App',
-	'action'     => 'index',
+	    'action'     => 'index',
     ));
 /*
     $router->add("/products/:action", array(
