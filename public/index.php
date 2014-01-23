@@ -65,38 +65,6 @@ try {
                 'className' => 'forma\App\Module',
                 'path'      => '../apps/App/Module.php',
             ),
-            'Contact'  => array(
-                'className' => 'forma\Contact\Module',
-                'path'      => '../apps/Contact/Module.php',
-            ),
-            'Lead'  => array(
-                'className' => 'forma\Lead\Module',
-                'path'      => '../apps/Lead/Module.php',
-            ),
-            'Ledger'  => array(
-                'className' => 'forma\Ledger\Module',
-                'path'      => '../apps/Ledger/Module.php',
-            ),
-            'Organization'  => array(
-                'className' => 'forma\Organization\Module',
-                'path'      => '../apps/Organization/Module.php',
-            ),
-            'Project'  => array(
-                'className' => 'forma\Project\Module',
-                'path'      => '../apps/Project/Module.php',
-            ),
-            'Tasklist'  => array(
-                'className' => 'forma\Tasklist\Module',
-                'path'      => '../apps/Tasklist/Module.php',
-            ),
-            'Time'  => array(
-                'className' => 'forma\Time\Module',
-                'path'      => '../apps/Time/Module.php',
-            ),
-            'User'  => array(
-                'className' => 'forma\User\Module',
-                'path'      => '../apps/User/Module.php',
-            ),
         )
     );
 

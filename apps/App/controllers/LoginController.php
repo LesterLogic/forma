@@ -1,8 +1,7 @@
 <?php
 namespace forma\App\Controllers;
 
-use forma\App\Forms\LoginForm,
-    forma\User\Models\User as User;
+use forma\App\Forms\LoginForm;
 
 class LoginController extends \Phalcon\Mvc\Controller
 {
@@ -12,21 +11,26 @@ class LoginController extends \Phalcon\Mvc\Controller
         $vars = Array(
             'title'=>'Login Controller Index',
             'metaDescription'=>'Login Controller Index Meta Description',
+            'login'=>'',
         );
 
         if ($this->request->isPost()) {
             if (!$form->isValid($this->request->getPost())) {
                 foreach ($form->getMessages() as $message) {
-                    $this->flash->error($message);
+                    $this->flash->message('validation', $message);
                 }
             } else {
                 $username = $this->request->getPost('login-username');
                 $password = $this->request->getPost('login-password');
 
-                $user = User::findFirst();
-                //$response = $acl->doLogin($username, $password);
-                print_r($user);
-                die();
+                $user = $acl->doLogin($username, $password);
+                if ($user !== FALSE) {
+                    $vars['login'] = "Logged in as ".$user->getId();
+                    $acl->setSession('user-id', $user->getId());
+                    $this->flash->success($this->session->get('user-id'));
+                } else {
+                    $vars['login'] = "No user found.";
+                }
             }
         }
 
@@ -35,21 +39,9 @@ class LoginController extends \Phalcon\Mvc\Controller
         $this->view->pick("login/index");
 	}
 
-    public function loginAction() {
-        $security = $this->di->get('security');
-        $username = $_POST['login-username'];
-        $password = $_POST['login-password'];
-        try {
-            $security->doLogin($username, $password);
-
-        } catch (\Exception $e) {
-
-        }
-
-        $this->view->pick("login/login");
-    }
-
     public function logoutAction() {
+        $this->session->remove('user-id');
+        
         $this->view->pick("login/logout");
     }
 }

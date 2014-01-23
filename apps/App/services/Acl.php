@@ -1,14 +1,16 @@
 <?php
 namespace forma\App\Services;
 
-use Phalcon\Mvc\Model\Query;
+use forma\App\Models\User as User;
 
 class Acl
 {
     protected $di;
+    protected $session;
 
     public function __construct($di) {
         $this->di = $di;
+        $this->session = $di->get('session');
     }
 
     public function isLoggedIn() {
@@ -16,13 +18,15 @@ class Acl
     }
 
     public function doLogin($username, $password) {
-        $query = new Phalcon\Mvc\Model\Query('SELECT * FROM Users', $this->di);
-        $users = $query->execute();
-        print_r($users);
-        die();
+        $user = User::findFirst(Array("username='$username' AND password='$password'"));
+        return $user;
     }
 
     public function doLogout() {
 
+    }
+
+    public function setSession($key, $value) {
+        $this->session->set($key, $value);
     }
 }
