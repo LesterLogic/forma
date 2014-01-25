@@ -3,25 +3,26 @@ namespace forma\App\Models;
 
 class User extends \Phalcon\Mvc\Model
 {
-	protected $id;
-	protected $username;
-	protected $password;
-	protected $displayname;
-	protected $ldate;
-	protected $active;
-	protected $cdate;
+	public $id;
+	public $username;
+	public $password;
+	public $displayname;
+	public $ldate;
+	public $active;
+	public $cdate;
 
     public function initialize() {
-        $this->hasMany("id", "Company", "uid");
-    }
-
-    public function getSource() {
-        return "User";
+        $this->hasMany("id", "forma\App\Models\Organization", "uid");
+        $this->hasManyToMany("id", "forma\App\Models\Organization_GroupUser", "uid", "gid", "forma\App\Models\Organization_Group", "id");
     }
 
 	public function getId() {
 		return $this->id;
 	}
+
+    private function setId() {
+        $this->id = md5('User'.time().rand());
+    }
 
 	public function getUsername() {
 		return $this->username;
