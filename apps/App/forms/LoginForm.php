@@ -49,7 +49,7 @@ class LoginForm extends Form
         //$this->add($csrf);
         $this->add($loginUsername);
         $this->add($loginPassword);
-        $this->add(new Submit("Login"));
+        $this->add(new Submit("Login", Array('class'=>'button button-green')));
     }
 
     public function getCsrf() {

@@ -6,6 +6,10 @@ use forma\App\Forms\LoginForm;
 class LoginController extends \Phalcon\Mvc\Controller
 {
 	public function indexAction() {
+        if ($this->session->has('user-id')) {
+            $this->response->redirect('app');
+        }
+
 	    $acl = $this->di->get('acl');
         $form = new LoginForm();
         $vars = Array(
@@ -17,7 +21,7 @@ class LoginController extends \Phalcon\Mvc\Controller
         if ($this->request->isPost()) {
             if (!$form->isValid($this->request->getPost())) {
                 foreach ($form->getMessages() as $message) {
-                    $this->flash->message('validation', $message);
+                    $this->flash->error($message);
                 }
             } else {
                 $username = $this->request->getPost('login-username');
@@ -25,11 +29,10 @@ class LoginController extends \Phalcon\Mvc\Controller
 
                 $user = $acl->doLogin($username, $password);
                 if ($user !== FALSE) {
-                    $vars['login'] = "Logged in as ".$user->getId();
                     $acl->setSession('user-id', $user->getId());
-                    $this->flash->success($this->session->get('user-id'));
+                    $this->response->redirect('app/select');
                 } else {
-                    $vars['login'] = "No user found.";
+                    $this->flash->error("No user found.");
                 }
             }
         }
@@ -41,7 +44,7 @@ class LoginController extends \Phalcon\Mvc\Controller
 
     public function logoutAction() {
         $this->session->remove('user-id');
-        
+
         $this->view->pick("login/logout");
     }
 }

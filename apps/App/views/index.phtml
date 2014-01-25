@@ -3,10 +3,20 @@
     <meta charset="UTF-8" />
     <meta name="description" content="<?php echo $metaDescription; ?>" />
     <title><?php echo $title; ?></title>
+    <link href="/css/main.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
-
-App Module Layout
+<div id="main-header">
+    <div id="main-logo"><a href="/" title="Back to home"><img src="/img/forma_logo_260x105.png" alt="Forma Logica" width="260" height="105" /></a></div>
+    <div id="main-controls" class="dark-green">
+        <?php
+            if (isset($isLoggedIn) && $isLoggedIn == TRUE) {
+                echo '<div class="control">'.$user->getDisplayName().'</div>';
+                echo '<div class="control"><a href="login/logout">Log out</a></div>';
+            }
+        ?>
+    </div>
+</div>
 <?php echo $this->getContent(); ?>
 
 </body>
