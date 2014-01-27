@@ -11,8 +11,8 @@
     <div id="main-controls" class="dark-green">
         <?php
             if (isset($isLoggedIn) && $isLoggedIn == TRUE) {
-                echo '<div class="control">'.$user->getDisplayName().'</div>';
-                echo '<div class="control"><a href="login/logout">Log out</a></div>';
+                echo '<div class="control">'.$user->getDisplayname().'</div>';
+                echo '<div class="control"><a href="/login/logout">Log out</a></div>';
             }
         ?>
     </div>

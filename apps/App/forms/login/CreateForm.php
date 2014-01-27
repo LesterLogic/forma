@@ -1,5 +1,5 @@
 <?php
-namespace forma\App\Forms;
+namespace forma\App\Forms\login;
 
 use Phalcon\Forms\Form,
     Phalcon\Forms\Element\Text,
@@ -23,22 +23,27 @@ use Phalcon\Forms\Form,
     Phalcon\Validation\Validator\Between,
     Phalcon\Validation\Validator\Confirmation;
 
-class LoginForm extends Form
+class CreateForm extends Form
 {
     public function initialize() {
         $this->setEntity($this);
 
         $loginUsername = new Text("login-username");
         $loginUsername->setLabel('Username: ');
+        $loginUsername->setAttribute('placeholder', 'Required');
         $loginUsername->addValidator(new PresenceOf(Array(
             'message'=>'Username is required.'
         )));
 
         $loginPassword = new Password("login-password");
         $loginPassword->setLabel('Password: ');
+        $loginPassword->setAttribute('placeholder', 'Required');
         $loginPassword->addValidator(new PresenceOf(Array(
             'message'=>'Password is required.'
         )));
+
+        $loginDisplay = new Text("login-display");
+        $loginDisplay->setLabel('Display Name: ');
 
         $csrf = new Hidden('csrf');
         $csrf->addValidator(new Identical(array(
@@ -49,7 +54,8 @@ class LoginForm extends Form
         //$this->add($csrf);
         $this->add($loginUsername);
         $this->add($loginPassword);
-        $this->add(new Submit("Login", Array('class'=>'button button-green')));
+        $this->add($loginDisplay);
+        $this->add(new Submit("Create", Array('class'=>'button button-green')));
     }
 
     public function getCsrf() {

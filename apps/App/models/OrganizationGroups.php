@@ -1,7 +1,7 @@
 <?php
 namespace forma\App\Models;
 
-class Organization_Group extends \Phalcon\Mvc\Model
+class OrganizationGroups extends \Phalcon\Mvc\Model
 {
     public $id;
     public $oid;
@@ -9,9 +9,13 @@ class Organization_Group extends \Phalcon\Mvc\Model
     public $name;
 
     public function initialize() {
-        $this->belongsTo("oid", "forma\App\Models\Organization", "id");
-        $this->belongsTo("id", "forma\App\Models\Organization_Group", "pid");
-        $this->hasManyToMany("id", "forma\App\Models\Organization_GroupUser", "gid", "uid", "forma\App\Models\User");
+        $this->belongsTo("oid", "forma\App\Models\Organizations", "id");
+        $this->belongsTo("id", "forma\App\Models\OrganizationGroups", "pid");
+        $this->hasManyToMany("id", "forma\App\Models\OrganizationGroupUsers", "gid", "uid", "forma\App\Models\Users", "id");
+    }
+
+    public function beforeValidationOnCreate() {
+        $this->setId();
     }
 
     public function getId() {
@@ -38,7 +42,7 @@ class Organization_Group extends \Phalcon\Mvc\Model
     }
 
     public function setPid($pid) {
-		if (strlen($pid) != 32) {
+		if (strlen($pid) != 32 && $pid != 0) {
 			throw new \InvalidArgumentException('Incorrect field length for "pid".');
 		}
 		$this->pid = $pid;

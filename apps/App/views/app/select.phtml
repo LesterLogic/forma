@@ -1,5 +1,17 @@
-Select template
-
+<div id="selector-main">
+    <div class="title">Select an Organization</div>
+    <div class="content">
 <?php
-    print_r($user->getId());
+    if ($user->orgs->count() > 0) {
+        echo '<ul>';
+        foreach ($user->orgs as $org) {
+            echo '<li><a href="/app/select?org='.$org->getId().'">'.$org->getName().'</a></li>';
+        }
+        echo '</ul>';
+    } else {
+        echo "<p>You do not appear to belong to any organizations. If you are just getting started with FormaLogica, please begin by creating your own organization using the button below.</p>";
+    }
 ?>
+        <a href="/organization/create" class="button button-green">Create New Organization</a>
+    </div>
+</div>

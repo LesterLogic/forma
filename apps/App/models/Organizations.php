@@ -1,16 +1,49 @@
 <?php
 namespace forma\App\Models;
 
-class Organization extends \Phalcon\Mvc\Model
+use forma\App\Models\OrganizationGroups,
+    forma\App\Models\OrganizationGroupUsers as GroupUser,
+    Phalcon\Mvc\Model\Message as Message;
+
+class Organizations extends \Phalcon\Mvc\Model
 {
-    public $id;
-    public $uid;
-    public $name;
-    public $active;
-    public $cdate;
+    protected $id;
+    protected $uid;
+    protected $name;
+    protected $active;
+    protected $cdate;
 
     public function initialize() {
-        $this->hasMany("id", "forma\App\Models\Organization_Group", "oid");
+        $this->hasMany("id", "forma\App\Models\OrganizationGroups", "oid");
+    }
+
+    public function beforeValidationOnCreate() {
+        $retVal = TRUE;
+        $this->setId();
+        $this->setActive(1);
+        $this->setCdate(date('Y-m-d H:i:s', time()));
+
+        $rootGroup = new OrganizationGroups();
+        $rootGroup->setOid($this->id);
+        $rootGroup->setPid(0);
+        $rootGroup->setName('Root');
+        if ($rootGroup->save() !== FALSE) {
+            $defaultGroupNames = Array(
+                'Administrators', 'Editors', 'Viewers'
+            );
+            foreach ($defaultGroupNames as $name) {
+                $group = new OrganizationGroups();
+                $group->setOid($this->id);
+                $group->setPid($rootGroup->getId());
+                $group->setName($name);
+                $group->save();
+            }
+        } else {
+            $this->appendMessage(new Message('Unable to create root group.'));
+            $retVal = FALSE;
+        }
+
+        return $retVal;
     }
 
 	public function getId() {
@@ -56,5 +89,10 @@ class Organization extends \Phalcon\Mvc\Model
 
     public function getCdate() {
         return $this->cdate();
+    }
+
+    public function setCdate() {
+        $cdate = new \DateTime();
+        $this->cdate = $cdate->format('Y-m-d H:i:s');
     }
 }

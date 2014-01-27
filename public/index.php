@@ -46,6 +46,16 @@ $di->set('router', function () {
     return $router;
 });
 
+//Registering the Models-Metadata
+$di->set('modelsMetadata', function(){
+    return new \Phalcon\Mvc\Model\Metadata\Memory();
+});
+
+//Registering the Models Manager
+$di->set('modelsManager', function(){
+    return new \Phalcon\Mvc\Model\Manager();
+});
+
 //Start the session the first time when some component request the session service
 $di->setShared('session', function() {
     $session = new Phalcon\Session\Adapter\Files();

@@ -1,21 +1,73 @@
 <?php
 namespace forma\App\Controllers;
 
-use forma\App\Forms\LoginForm;
+use forma\App\Forms\login\LoginForm,
+    forma\App\Forms\login\CreateForm,
+    forma\App\Models\Users as User;
 
 class LoginController extends \Phalcon\Mvc\Controller
 {
-	public function indexAction() {
-        if ($this->session->has('user-id')) {
-            $this->response->redirect('app');
+    protected $acl;
+
+    public function beforeExecuteRoute() {
+        $this->acl = $this->di->get('acl');
+    }
+
+    public function createAction() {
+        if ($this->acl->isLoggedIn()) {
+            $this->dispatcher->forward(array(
+                'controller'=>'app',
+                'action'=>'index'
+            ));
         }
 
-	    $acl = $this->di->get('acl');
+        $form = new CreateForm();
+        $vars = Array(
+            'title'=>'Account Create',
+            'metaDescription'=>'',
+        );
+
+        if ($this->request->isPost()) {
+            if (!$form->isValid($this->request->getPost())) {
+                foreach ($form->getMessages() as $message) {
+                    $this->flash->error($message);
+                }
+            } else {
+                $username = $this->request->getPost('login-username');
+                $password = $this->request->getPost('login-password');
+                $display = $this->request->getPost('login-display');
+                $display = empty($display) ? $username : $display;
+
+                $user = new User();
+                $user->setUsername($username);
+                $user->setPassword($password);
+                $user->setDisplayName($display);
+
+                if ($user->save() === false) {
+                    $this->flash->error('That username is already in use.');
+                } else {
+                    $this->response->redirect('login/index');
+                }
+            }
+        }
+
+        $this->view->setVars($vars);
+        $this->view->form = $form;
+        $this->view->pick("login/create");
+    }
+
+	public function indexAction() {
+        if ($this->acl->isLoggedIn()) {
+            $this->dispatcher->forward(array(
+                'controller'=>'app',
+                'action'=>'index'
+            ));
+        }
+
         $form = new LoginForm();
         $vars = Array(
-            'title'=>'Login Controller Index',
-            'metaDescription'=>'Login Controller Index Meta Description',
-            'login'=>'',
+            'title'=>'Account Login',
+            'metaDescription'=>'',
         );
 
         if ($this->request->isPost()) {
@@ -27,12 +79,12 @@ class LoginController extends \Phalcon\Mvc\Controller
                 $username = $this->request->getPost('login-username');
                 $password = $this->request->getPost('login-password');
 
-                $user = $acl->doLogin($username, $password);
+                $user = $this->acl->doLogin($username, $password);
                 if ($user !== FALSE) {
-                    $acl->setSession('user-id', $user->getId());
+                    $this->acl->setSession('user-id', $user->getId());
                     $this->response->redirect('app/select');
                 } else {
-                    $this->flash->error("No user found.");
+                    $this->flash->error("Account not found");
                 }
             }
         }
@@ -43,8 +95,13 @@ class LoginController extends \Phalcon\Mvc\Controller
 	}
 
     public function logoutAction() {
-        $this->session->remove('user-id');
+        $vars = Array(
+            'title'=>'Account Logout',
+            'metaDescription'=>'',
+        );
 
+        $this->session->destroy();
+        $this->view->setVars($vars);
         $this->view->pick("login/logout");
     }
 }

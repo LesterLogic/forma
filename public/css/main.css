@@ -8,6 +8,11 @@ body {
     background-color: #FFF;
 }
 
+p {
+    margin: 0 0 1em 0;
+}
+
+
 .bg-green {
     background-color: #7cb723;
 }
@@ -18,6 +23,8 @@ body {
 
 .title {
     font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: .35em;
 }
 
 .dark-green {
@@ -32,7 +39,7 @@ a:link {
 }
 
 a:visited {
-    color: #0078b3;
+    color: #66961e;
 }
 
 a:active, a:hover {
@@ -43,13 +50,10 @@ a:active, a:hover {
 /**  Buttons                                                      **/
 /*******************************************************************/
 .button {
+    display: inline-block;
     color: #FFF;
     padding: 1px 10px;
-    height: 20px;
-    line-height: 11px;
     font-size: 1.1em;
-    text-align: center;
-    white-space: nowrap;
 }
 
 .button-green {
@@ -118,11 +122,28 @@ a.button {
 }
 
 #login-main {
-    width: 300px;
+    width: 280px;
     padding: 10px;
     margin: 0 auto 0 auto;
     font-size: 1.2em;
     box-shadow: 0 0 5px 1px #EEE;
+}
+
+#selector-main {
+    width: 280px;
+    padding: 10px;
+    margin: 0 auto 0 auto;
+    box-shadow: 0 0 5px 1px #EEE;
+}
+
+#selector-main .content {
+    font-size: 1.2em;
+}
+
+#selector-main .content ul {
+    list-style: none;
+    margin: 0 0 1em 0;
+    padding: 0;
 }
 
 #main-controls {
@@ -138,10 +159,31 @@ a.button {
     margin-left: 1em;
 }
 
+/*******************************************************************/
+/**  Sheets                                                       **/
+/*******************************************************************/
+.sheet-main {
+    width: 380px;
+    min-width: 330px;
+    padding: 10px;
+    margin: 0 auto 0 auto;
+    box-shadow: 0 0 5px 1px #EEE;
+}
+
+.sheet-main .content {
+    font-size: 1.2em;
+}
+
 
 /*******************************************************************/
 /**  Forms                                                        **/
 /*******************************************************************/
+form {
+    margin: 0;
+    padding: 0;
+}
+
+
 form label {
     display: inline-block;
     width: 100px;
@@ -152,12 +194,17 @@ form label {
     margin: 0 0 .5em 0;
 }
 
+form button {
+    cursor: pointer;
+}
+
+
 /*******************************************************************/
 /**  Messages                                                     **/
 /*******************************************************************/
 div.errorMessage {
     padding: 0 0 0 10px;
     margin: 0 0 .5em 0;
-    color: #991a1a;
+    color: #c70c0e;
 }
 

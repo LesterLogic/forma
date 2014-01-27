@@ -1,19 +1,34 @@
 <?php
 namespace forma\App\Models;
 
-class User extends \Phalcon\Mvc\Model
+class Users extends \Phalcon\Mvc\Model
 {
-	public $id;
-	public $username;
-	public $password;
-	public $displayname;
-	public $ldate;
-	public $active;
-	public $cdate;
+	protected $id;
+	protected $username;
+	protected $password;
+	protected $displayname;
+	protected $ldate;
+	protected $active;
+	protected $cdate;
 
     public function initialize() {
-        $this->hasMany("id", "forma\App\Models\Organization", "uid");
-        $this->hasManyToMany("id", "forma\App\Models\Organization_GroupUser", "uid", "gid", "forma\App\Models\Organization_Group", "id");
+        $this->hasMany("id", "forma\App\Models\Organizations", "uid", Array('alias'=>'orgs'));
+        $this->hasManyToMany("id", "forma\App\Models\Organization_GroupUsers", "uid", "gid", "forma\App\Models\Organization_Groups", "id", Array('alias'=>'groups'));
+    }
+
+    public function beforeValidationOnCreate() {
+        $retVal = true;
+        $this->setId();
+        $this->setActive(1);
+        $this->setCdate();
+        $this->setLdate();
+
+        if (Users::findFirst('username="'.$this->getUsername().'"') !== false) {
+            print_r("No user for you!");
+            $retVal = false;
+        }
+
+        return $retVal;
     }
 
 	public function getId() {
@@ -32,7 +47,7 @@ class User extends \Phalcon\Mvc\Model
 		if (strlen($name) < 1 || strlen($name) > 255) {
 			throw new \InvalidArgumentException('Incorrect field length for "name".');
 		}
-		$this->name = $name;
+		$this->username = $name;
 	}
 
 	public function getPassword() {
@@ -62,7 +77,8 @@ class User extends \Phalcon\Mvc\Model
 	}
 
 	public function setLdate() {
-		$this->ldate = new DateTime();
+        $ldate = new \DateTime();
+        $this->ldate = $ldate->format('Y-m-d H:i:s');
 	}
 
 	public function getActive() {
@@ -78,6 +94,7 @@ class User extends \Phalcon\Mvc\Model
 	}
 
 	public function setCdate() {
-		$this->cdate = new DateTime();
+        $cdate = new \DateTime();
+        $this->cdate = $cdate->format('Y-m-d H:i:s');
 	}
 }
