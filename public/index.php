@@ -1,14 +1,18 @@
 <?php
+require '../apps/App/config/config.php';
 
 use Phalcon\Mvc\Router,
     Phalcon\Mvc\Application,
     Phalcon\DI\FactoryDefault,
-    Phalcon\Session\Adapter\Files;
+    Phalcon\Session\Adapter\Files,
+    Phalcon\Config;
 
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
 $di = new FactoryDefault();
+
+$di->set('config', new Config($config));
 
 //Setup the database service
 $di->set('db', function() {

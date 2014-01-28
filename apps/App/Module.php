@@ -9,13 +9,10 @@ use Phalcon\Loader,
 
 class Module implements ModuleDefinitionInterface
 {
-
     /**
      * Register a specific autoloader for the module
      */
-    public function registerAutoloaders()
-    {
-
+    public function registerAutoloaders() {
         $loader = new Loader();
 
         $loader->registerNamespaces(
@@ -33,9 +30,7 @@ class Module implements ModuleDefinitionInterface
     /**
      * Register specific services for the module
      */
-    public function registerServices($di)
-    {
-
+    public function registerServices($di) {
         //Registering a dispatcher
         $di->set('dispatcher', function() {
             $dispatcher = new Dispatcher();

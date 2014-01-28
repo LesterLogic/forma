@@ -24,7 +24,6 @@ class Users extends \Phalcon\Mvc\Model
         $this->setLdate();
 
         if (Users::findFirst('username="'.$this->getUsername().'"') !== false) {
-            print_r("No user for you!");
             $retVal = false;
         }
 
@@ -55,10 +54,11 @@ class Users extends \Phalcon\Mvc\Model
 	}
 
 	public function setPassword($password) {
+        $config = $this->getDI()->get('config');
 		if (strlen($password) < 1 || strlen($password) > 511) {
 			throw new \InvalidArgumentException('Incorrect field length for "password".');
 		}
-		$this->password = $password;
+		$this->password = crypt($password, $config['security']['encryption_key']);
 	}
 
 	public function getDisplayname() {
