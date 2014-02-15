@@ -3,9 +3,21 @@
     <meta charset="UTF-8" />
     <meta name="description" content="<?php echo $metaDescription; ?>" />
     <title><?php echo $title; ?></title>
-    <link href="/css/main.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet/less" type="text/css" href="/css/main.less" />
+    <!-- <link href="/css/main.css" type="text/css" rel="stylesheet" /> -->
+
+    <script src="/js/jquery-2.1.0.min.js" type="text/javascript"></script>
+    <script src="/js/angular/angular.min.js" type="text/javascript"></script>
+    <script src="/js/angular/angular-sanitize.min.js" type="text/javascript"></script>
+    <script src="/js/angular/app.js" type="text/javascript"></script>
+    <script src="/js/angular/services.js" type="text/javascript"></script>
+    <script src="/js/angular/controllers.js" type="text/javascript"></script>
+    <script src="/js/angular/filters.js" type="text/javascript"></script>
+    <script src="/js/angular/directives.js" type="text/javascript"></script>
+    <script src="/js/less/less-1.6.1.min.js" type="text/javascript"></script>
+    <script src="/js/main.js" type="text/javascript"></script>
 </head>
-<body>
+<body ng-app="formaApp">
 <div id="main-header">
     <div id="main-logo"><a href="/" title="Back to home"><img src="/img/forma_logo_260x105.png" alt="Forma Logica" width="260" height="105" /></a></div>
     <div id="main-controls" class="dark-green">
@@ -16,8 +28,15 @@
             }
         ?>
     </div>
+    <div id="main-bct" ng-controller="SheetCtrl">
+        <div id="bct-wrapper">
+            <div id="bct-block" bctblock ng-model="sheets">
+                <div class="bct-main" ng-repeat="sheet in bct.sheets" ng-click="haveFocus($index)" ng-class="{future: ($index > bct.activeSheet)}">{{ sheet.data.title }}</div>
+            </div>
+        </div>
+    </div>
 </div>
+<div id="sheet-pointer"></div>
 <?php echo $this->getContent(); ?>
-
 </body>
 </html>

@@ -1,0 +1,10 @@
+<div class="header bg-green">
+    <ul class="actions">
+        <li><a href="javascript://" title="Print Sheet" ng-click="printSheet($index, $event)">Print</a></li>
+        <li><a href="javascript://" title="Email Sheet" ng-click="emailSheet($index, $event)">Email</a></li>
+        <li><a href="javascript://" title="Edit Sheet" ng-click="editSheet($index, $event)">Edit</a></li>
+        <li><a href="javascript://" title="Close Sheet" ng-click="closeSheet($index, $event)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+    </ul>
+</div>
+<div class="title">{{ sheet.data.title }}</div>
+<div class="content"></div>

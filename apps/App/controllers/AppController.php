@@ -2,7 +2,8 @@
 namespace forma\App\Controllers;
 
 use forma\App\Models\Users as Users,
-    forma\App\Models\Organizations as Organizations;
+    forma\App\Models\Organizations as Organizations,
+    Phalcon\Mvc\View\Simple;
 
 class AppController extends \Phalcon\Mvc\Controller
 {
@@ -36,6 +37,7 @@ class AppController extends \Phalcon\Mvc\Controller
         }
 
         $this->view->setVars($vars);
+        $this->view->pick("app/index");
 	}
 
     public function selectAction() {
@@ -53,5 +55,24 @@ class AppController extends \Phalcon\Mvc\Controller
         }
 
         $this->view->setVars($vars);
+    }
+
+    public function dashboardAction($action) {
+        $this->view->disable();
+        $response = new \Phalcon\Http\Response();
+        $view = new \Phalcon\Mvc\View\Simple();
+        $view->setViewsDir('../apps/App/views/');
+
+        $sheet = Array(
+            'title' => 'Dashboard',
+            'data' => Array(),
+        );
+        if ($action == "template") {
+            $response->setContent($view->render('app/dashboard'));
+        } else {
+            $response->setContent(json_encode($sheet));
+        }
+
+        return $response;
     }
 }

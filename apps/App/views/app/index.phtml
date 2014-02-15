@@ -1,0 +1,5 @@
+<div id="sheet-wrapper" sheetwrapper ng-style="{ width: windowWidth, height: windowHeight }" ng-controller="MainCtrl" ng-init="init()">
+    <div id="sheet-block" sheetblock ng-model="sheets">
+        <div ng-controller="SheetCtrl" ng-repeat="sheet in bct.sheets" ng-click="haveFocus($index)" sheet class="sheet-main"></div>
+    </div>
+</div>
